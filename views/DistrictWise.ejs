@@ -1,0 +1,109 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+
+
+<% var data=data.districtData; %>
+
+<% var Data=[]; %>
+
+<% Object.entries(data).forEach(item=>{ %>
+<%  if(item[0]!="Unknown"){ %>
+  <% Data.push([item[0],item[1]]); %>
+<% } %>
+<% }) %>
+
+<% Data.sort((a, b) => { %>
+<%   return b[1].active - a[1].active; %>
+<% }); %>
+
+<h1><%=state%></h1>
+
+<div class="container content">
+
+  <div class="bar" style="width: 75%; margin: auto; height: 300px;">
+    <canvas id="bar"></canvas>
+  </div>
+
+
+
+  <table class="table table-striped" style="width: 75%; margin: 50px auto; border: 2px solid #E5E5E5;">
+    <thead>
+      <th>District</th>
+      <th>Active Cases</th>
+      <th>Total Confirmed Cases</th>
+      <th>Recovered</th>
+      <th>Deaths</th>
+    </thead>
+    <tbody>
+
+      <% Data.forEach(district=>{ %>
+        <tr>
+          <td><%=district[0]%></td>
+          <td><%= district[1].active %>    </td>
+          <td><%= district[1].confirmed %> </td>
+          <td><%= district[1].recovered %> </td>
+          <td><%= district[1].deceased %>    </td>
+        </tr>
+      <% }) %>
+
+      
+    </tbody>
+  </table>
+
+
+</div>
+
+
+<% var Data1={}; %>
+<% Data1.dName=[]; %>
+<% Data1.activeN=[]; %>
+
+<% Data.forEach(d=>{ %>
+<%   Data1.dName.push(d[0]); %>
+<%   Data1.activeN.push(d[1].active); %>
+<% }); %>
+
+<% var Data1= JSON.stringify(Data1) %>
+
+
+<script>
+  var data='<%-Data1 %>';
+  data=JSON.parse(data);
+
+  var Districts=data.dName,Active=data.activeN;
+
+    
+  var ctx = document.getElementById('bar').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Districts,
+            datasets: [{
+                label: 'Active Cases',
+                data: Active,
+                backgroundColor: "red",
+                borderColor: "black",
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: {
+                    beginAtZero: true
+                },
+                xAxes: [{
+                  ticks: {
+                    autoSkip: false
+                  }
+                }]
+                
+            }
+        }
+    });
+
+
+</script>
+
+<%- include('partials/footer') %>

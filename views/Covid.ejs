@@ -1,0 +1,100 @@
+<%- include('partials/header') %> 
+<%- include('partials/nav') %>
+
+<% data.statewise.sort((a, b) => { %>
+<%   return b.active - a.active; %>
+<% }); %>
+
+<h1>Covid data of INDIA</h1>
+<div class="container content">
+
+  <div class="bar" style="width: 75%; margin: auto; height: 300px;">
+    <canvas id="bar"></canvas>
+  </div>
+
+
+  <table class="table table-striped" style="width: 75%; margin: 50px auto; border: 2px solid #E5E5E5;">
+    <thead>
+      <th>State</th>
+      <th>Active Cases</th>
+      <th>Total Confirmed Cases</th>
+      <th>Recovered</th>
+      <th>Deaths</th>
+    </thead>
+    <tbody>
+      <% for(state of data.statewise){ %>
+        <% if(state.state!="State Unassigned" && state.state!="Total") {%>
+        <tr>
+          <td><a href="/District-wise/<%=state.state%>"><%= state.state %></a>    </td>
+          <td><%= state.active %>    </td>
+          <td><%= state.confirmed %> </td>
+          <td><%= state.recovered %> </td>
+          <td><%= state.deaths %>    </td>
+        </tr>
+        <% } %>
+      <% } %>
+      <tr>
+        <td>Total</td>
+        <td><%= data.statewise[0].active %></td>
+        <td><%= data.statewise[0].confirmed %></td>
+        <td><%= data.statewise[0].recovered %></td>
+        <td><%= data.statewise[0].deaths %></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<% var Data={}; %>
+<% Data.sName=[]; %>
+<% Data.activeN=[]; %>
+
+<% data.statewise.forEach(state=>{ %>
+<%   if((state.state!="State Unassigned" && state.state!="Total")&&(state.active>1000)) {%>
+<%     Data.sName.push(state.state); %>
+<%     Data.activeN.push(state.active); %>
+<%   } %>
+<% }) %>
+
+<% var data1= JSON.stringify(Data) %>
+
+
+<script>
+  var data='<%-data1 %>';
+  data=JSON.parse(data);
+
+  var states=data.sName,Active=data.activeN;
+    
+  var ctx = document.getElementById('bar').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: states,
+            datasets: [{
+                label: 'Active Cases',
+                data: Active,
+                backgroundColor: "red",
+                borderColor: "black",
+                borderWidth: 0
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: {
+                    beginAtZero: true
+                },
+                xAxes: [{
+                  ticks: {
+                    autoSkip: false
+                  }
+                }]
+                
+            }
+        }
+    });
+
+
+</script>
+
+<%- include('partials/footer') %>

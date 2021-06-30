@@ -1,0 +1,108 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<style>
+    body{
+        background: #C6FFDD;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);
+        background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD);
+    }
+    
+    .card{
+        background-color: white;
+        box-shadow:5px 5px 5px 0  #C6C6C6;
+        text-align: left;
+        width: 75%;
+        margin-top: 50px;
+        padding: 50px;
+    }
+    i{
+        margin: 10px;
+    }
+    img{
+        height: 50px;
+        width: 50px;
+        display: inline;
+    }
+    
+</style>
+
+<div class="row">
+    <div class="col col-lg-6">
+        <div class="card container-fluid">
+            <p>developed by</p>
+            <div style="text-align: center;">
+                <img src="https://lh3.googleusercontent.com/a-/AOh14Gi4mPOnwmCxqTEuaLjcJc5l_TqojyMDFeLPedfi-Q=s96-c-rg-br100" alt="">
+                <h3>Saurabh Kumar</h3>
+            </div>
+            
+            <!-- <p>You can conatct for any suggestions or just to have a chat.</p> -->
+            <p>
+                <i class="fas fa-envelope"></i>: saurav123sau123@gmail.com
+                <br>
+                <i class="fas fa-phone-alt"></i>: +91 8102070732
+                <br>
+                <i class="fab fa-github"></i>: <a href="https://github.com/SinchowGit"">https://github.com/SinchowGit</a>
+                <br>
+                <i class="fab fa-linkedin" style="color: #0B5ED7;"></i>: <a href="https://www.linkedin.com/in/saurabh-kumar-7b947a156/">https://www.linkedin.com/in/saurabh-kumar-7b947a156/</a>
+            </p>
+
+
+
+        </div>
+    </div>
+    <div class="col col-lg-6">
+        <div class="card container-fluid">
+            <form action="https://formspree.io/f/xwkaqeyv" method="POST" id="contactForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="text" class="form-control" id="email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label for="msg" class="form-label">Message</label>
+                    <textarea name="message" id="msg" cols="20" rows="5" class="form-control"></textarea>
+                </div>
+                <input class="btn btn-lg btn-primary" type="submit" value="Submit">
+            </form>
+            <div style="visibility: hidden;" class="alert alert-primary" id="status1" role="alert">
+            </div>
+            <div style="visibility: hidden;" class="alert alert-danger" role="alert" id="status1" >
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var form = document.getElementById("contactForm");
+    
+    async function handleSubmit(event) {
+      event.preventDefault();
+      var status1 = document.getElementById("status1");
+      var status2 = document.getElementById("status2");
+      var data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      }).then(response => {
+        status1.style.visibility='visible';
+        status1.innerHTML = "Thanks!";
+        form.reset()
+      }).catch(error => {
+        status2.style.visibility='visible';
+        status2.innerHTML = "Oops! Something went wrong"
+      });
+    }
+    form.addEventListener("submit", handleSubmit)
+</script>
+
+
+
+<%- include('partials/footer') %>
